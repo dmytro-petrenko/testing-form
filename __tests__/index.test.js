@@ -8,10 +8,10 @@ describe('Render Home page', () => {
     const fomrContainer = screen.getByTestId('form');
     expect(fomrContainer).toBeInTheDocument();
 
-    const firstTextLabel = screen.getByLabelText('Text 1');
+    const firstTextLabel = screen.getByLabelText('First Name');
     expect(firstTextLabel).toBeInTheDocument();
 
-    const secondTextLabel = screen.getByLabelText('Text 2');
+    const secondTextLabel = screen.getByLabelText('Last Name');
     expect(secondTextLabel).toBeInTheDocument();
 
     const dropdown = screen.getByRole('button', { name: /Select item/i });
@@ -34,14 +34,14 @@ describe('Render Home page', () => {
 describe('Success case', () => {
   it('inputs data and submit', () => {
     render(<Home />);
-    const firstTextLabel = screen.getByLabelText('Text 1');
-    fireEvent.change(firstTextLabel, { target: { value: 'first text' } });
-    expect(screen.getByLabelText('Text 1')).toHaveValue('first text');
+    const firstTextLabel = screen.getByLabelText('First Name');
+    fireEvent.change(firstTextLabel, { target: { value: 'John' } });
+    expect(screen.getByLabelText('First Name')).toHaveValue('John');
 
-    fireEvent.change(screen.getByLabelText('Text 2'), {
-      target: { value: 'second text' },
+    fireEvent.change(screen.getByLabelText('Last Name'), {
+      target: { value: 'Doe' },
     });
-    expect(screen.getByLabelText('Text 2')).toHaveValue('second text');
+    expect(screen.getByLabelText('Last Name')).toHaveValue('Doe');
 
     fireEvent.change(screen.getByPlaceholderText('mm/dd/yyyy'), {
       target: { value: '01/10/2023' },
@@ -79,5 +79,4 @@ describe('Failure case', () => {
     expect(screen.getByText('Failure')).toBeInTheDocument();
   });
   it('double click on submit button', () => {});
-
 });

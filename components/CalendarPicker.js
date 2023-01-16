@@ -11,6 +11,7 @@ const CalendarPicker = ({ calendarData, setCalendarData }) => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
+        id="datepicker-input"
         label="Select date"
         value={calendarData}
         onChange={(val) => {

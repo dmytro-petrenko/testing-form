@@ -17,8 +17,8 @@ import dayjs from 'dayjs';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  const [firstText, setFirstText] = useState('');
-  const [secondText, setSecondText] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [dropDownItem, setDropDownItem] = useState('');
   const [calendarData, setCalendarData] = useState(null);
   const [radioVal, setRadioVal] = useState('male');
@@ -27,12 +27,12 @@ export default function Home() {
 
   console.log('submittedData: ', submittedData);
 
-  const firstTextHandler = (event) => {
-    setFirstText(event.target.value);
+  const firstNameHandler = (event) => {
+    setFirstName(event.target.value);
   };
 
-  const secondTextHandler = (event) => {
-    setSecondText(event.target.value);
+  const lastNameHandler = (event) => {
+    setLastName(event.target.value);
   };
 
   const openModalHandler = () => {
@@ -46,8 +46,8 @@ export default function Home() {
   const submitHandler = (event) => {
     event.preventDefault();
     const subData = {
-      text1: firstText,
-      text2: secondText,
+      firstName,
+      lastName,
       dropDownItem,
       calendarData:
         calendarData &&
@@ -55,9 +55,29 @@ export default function Home() {
         dayjs(calendarData.$d).format('MM/DD/YYYY'),
       gender: radioVal,
     };
+
     setSubmittedData(subData);
-    setFirstText('');
-    setSecondText('');
+
+    // fetch('/api/form', {
+    //   method: 'POST',
+    //   body: subData,
+    // }).then((res) => {
+    //   if (res.status === 200) {
+    //     console.log('SUCCESS!!!');
+    //     openModalHandler();
+    //   } else if (res.status === 408) {
+    //     console.log('SOMETHING WENT WRONG');
+    //     setSubmittedData({});
+    //     openModalHandler();
+    //   } else {
+    //     console.log('FAILURE!!!');
+    //     setSubmittedData({});
+    //     openModalHandler();
+    //   }
+    // });
+
+    setFirstName('');
+    setLastName('');
     setDropDownItem('');
     setCalendarData(null);
     setRadioVal('male');
@@ -70,6 +90,7 @@ export default function Home() {
       <Box
         data-testid="form"
         component="form"
+        method="POST"
         onSubmit={(event) => submitHandler(event)}
         sx={{
           display: 'flex',
@@ -88,15 +109,20 @@ export default function Home() {
           }}
         >
           <TextField
-            label="Text 1"
+            id="first-name-input"
+            label="First Name"
             variant="outlined"
-            value={firstText}
-            onChange={firstTextHandler}
+            value={firstName}
+            onChange={firstNameHandler}
             sx={{ width: '225px' }}
           />
-          <DropdownComponent
-            dropdownValue={dropDownItem}
-            setDropDownValue={setDropDownItem}
+          <TextField
+            id="last-name-input"
+            label="Last Name"
+            variant="outlined"
+            value={lastName}
+            onChange={lastNameHandler}
+            sx={{ width: '225px' }}
           />
         </Box>
         <Box
@@ -109,13 +135,9 @@ export default function Home() {
             mb: '20px',
           }}
         >
-          <TextField
-            data-testid="first-text-input"
-            label="Text 2"
-            variant="outlined"
-            value={secondText}
-            onChange={secondTextHandler}
-            sx={{ width: '225px' }}
+          <DropdownComponent
+            dropdownValue={dropDownItem}
+            setDropDownValue={setDropDownItem}
           />
           <CalendarPicker
             calendarData={calendarData}
@@ -170,9 +192,8 @@ export default function Home() {
           Submit
         </Button>
       </Box>
-      <div>
-        <ModalComponent open={openModal} submittedData={submittedData} />
-      </div>
+
+      <ModalComponent open={openModal} submittedData={submittedData} />
     </main>
   );
 }

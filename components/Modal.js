@@ -25,8 +25,8 @@ const ModalComponent = ({ open, submittedData }) => {
   let isSucces;
   if (submittedData && Object.entries(submittedData).length) {
     if (
-      submittedData.text1.length &&
-      submittedData.text2.length &&
+      submittedData.firstName.length &&
+      submittedData.lastName.length &&
       submittedData.dropDownItem.length &&
       submittedData.calendarData &&
       submittedData.gender
@@ -41,7 +41,7 @@ const ModalComponent = ({ open, submittedData }) => {
 
   return (
     <Modal hideBackdrop open={open}>
-      <Box sx={{ ...style, borderColor: isSucces ? 'green' : 'red' }}>
+      <Box data-testid="modal-window" sx={{ ...style, borderColor: isSucces ? 'green' : 'red' }}>
         <h2 style={{ color: isSucces ? 'green' : 'red' }}>
           {isSucces ? 'Success' : 'Failure '}
         </h2>

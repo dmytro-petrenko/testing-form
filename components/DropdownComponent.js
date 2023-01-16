@@ -8,23 +8,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const StyledMenu = styled((props) => (
   <Menu
-    // elevation={0}
-    // anchorOrigin={{
-    //   vertical: 'bottom',
-    //   horizontal: 'right',
-    // }}
-    // transformOrigin={{
-    //   vertical: 'top',
-    //   horizontal: 'right',
-    // }}
-    // id="menu"
-    // MenuListProps={{
-    //   'aria-labelledby': 'fade-button',
-    // }}
-    // anchorEl={anchorEl}
-    // open={open}
-    // onClose={handleClose}
-    // TransitionComponent={Fade}
     {...props}
   />
 ))(({ theme }) => ({
@@ -65,7 +48,7 @@ const DropdownComponent = ({ dropdownValue, setDropDownValue }) => {
   return (
     <div>
       <Button
-        id="button"
+        id="dropdown-button"
         aria-controls={open ? 'fade-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
