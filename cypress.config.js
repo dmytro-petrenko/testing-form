@@ -1,11 +1,13 @@
-const { defineConfig } = require("cypress");
+const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   component: {
     devServer: {
-      framework: "next",
-      bundler: "webpack",
+      framework: 'next',
+      bundler: 'webpack',
     },
+    viewportWidth: 1280,
+    viewportHeight: 720,
   },
 
   e2e: {

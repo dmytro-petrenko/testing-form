@@ -19,11 +19,11 @@ const inter = Inter({ subsets: ['latin'] });
 export default function Home() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [dropDownItem, setDropDownItem] = useState('');
+  const [dropdownItem, setDropdownItem] = useState('');
   const [calendarData, setCalendarData] = useState(null);
   const [radioVal, setRadioVal] = useState('male');
   const [submittedData, setSubmittedData] = useState({});
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState({ open: false, statusCode: 200 });
 
   console.log('submittedData: ', submittedData);
 
@@ -35,20 +35,20 @@ export default function Home() {
     setLastName(event.target.value);
   };
 
-  const openModalHandler = () => {
-    setOpenModal(true);
+  const openModalHandler = (open, statusCode) => {
+    setOpenModal({ open, statusCode });
   };
 
   const closeModalHandler = () => {
-    setOpenModal(false);
+    setOpenModal({ ...openModal, open: false });
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     const subData = {
       firstName,
       lastName,
-      dropDownItem,
+      dropdownItem,
       calendarData:
         calendarData &&
         calendarData.$d &&
@@ -58,31 +58,30 @@ export default function Home() {
 
     setSubmittedData(subData);
 
-    // fetch('/api/form', {
-    //   method: 'POST',
-    //   body: subData,
-    // }).then((res) => {
-    //   if (res.status === 200) {
-    //     console.log('SUCCESS!!!');
-    //     openModalHandler();
-    //   } else if (res.status === 408) {
-    //     console.log('SOMETHING WENT WRONG');
-    //     setSubmittedData({});
-    //     openModalHandler();
-    //   } else {
-    //     console.log('FAILURE!!!');
-    //     setSubmittedData({});
-    //     openModalHandler();
-    //   }
-    // });
+    let response = await fetch('/api/form', {
+      method: 'POST',
+      body: JSON.stringify(subData),
+    });
+    if (response.status === 200) {
+      console.log('SUCCESS!!!');
+      openModalHandler(true, 200);
+      let data = await response.json();
+      console.log('Data from Fetch: ', data.body);
+    } else if (response.status === 408) {
+      console.log('SOMETHING WENT WRONG');
+      setSubmittedData({});
+      openModalHandler(true, 408);
+    } else {
+      console.log('FAILURE!!!');
+      setSubmittedData({});
+      openModalHandler(true, response.status);
+    }
 
     setFirstName('');
     setLastName('');
-    setDropDownItem('');
+    setDropdownItem('');
     setCalendarData(null);
     setRadioVal('male');
-
-    openModalHandler();
   };
 
   return (
@@ -136,8 +135,8 @@ export default function Home() {
           }}
         >
           <DropdownComponent
-            dropdownValue={dropDownItem}
-            setDropDownValue={setDropDownItem}
+            dropdownValue={dropdownItem}
+            setDropDownValue={setDropdownItem}
           />
           <CalendarPicker
             calendarData={calendarData}
@@ -193,7 +192,10 @@ export default function Home() {
         </Button>
       </Box>
 
-      <ModalComponent open={openModal} submittedData={submittedData} />
+      <ModalComponent
+        open={openModal.open}
+        statusCode={openModal.statusCode}
+      />
     </main>
   );
 }

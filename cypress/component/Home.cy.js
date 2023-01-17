@@ -1,25 +1,8 @@
-const sabmitData = {
-  firstName: 'John',
-  lastName: 'Doe',
-  dropDownItem: 'Menu item 2',
-  calendarData: '01/15/2023',
-  gender: 'male',
-};
+import Home from '../../pages/index';
 
-describe('Home page test', () => {
+describe('Form component integration test', () => {
   beforeEach(() => {
-    // cy.intercept('POST', '/api/form', {
-    //   statusCode: 200,
-    //   body: {
-    //     firstName: 'John',
-    //     lastName: 'Doe',
-    //     dropDownItem: 'Menu item 2',
-    //     calendarData: '01/15/2023',
-    //     gender: 'male',
-    //   },
-    // }).as('getApi');
-
-    cy.visit('http://localhost:3000');
+    cy.mount(<Home />);
   });
   it('Success case', () => {
     cy.intercept('POST', '/api/form', {
@@ -32,6 +15,7 @@ describe('Home page test', () => {
         gender: 'male',
       },
     }).as('getApi');
+
     // Write First Name
     cy.get('input#first-name-input').type('John').should('have.value', 'John');
 
